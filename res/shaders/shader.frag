@@ -21,7 +21,7 @@ float divergeMag(vec2 c) {
         z = vec2(z.x*z.x - z.y*z.y, 2*z.x*z.y) + c;
         float magnitudeCur = z.x*z.x + z.y*z.y;
 
-        if (magnitudeCur > 2) {
+        if (magnitudeCur > 6) {
             float val = 0.11+3*float(i)/its;
             if (val > 1) return 1;
             else return val;
