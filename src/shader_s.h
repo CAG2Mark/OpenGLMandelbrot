@@ -26,7 +26,7 @@ public:
     void setInt(const char* name, int value) const;
     
     void setFloat(const char* name, float value) const;
-
+    
     void setVec2Float(const char* name, float val1, float val2) const;
 };
 

@@ -1,4 +1,4 @@
-#version 330 core
+#version 400 core
 out vec4 FragColor;
 in vec4 vertexColor;
 in vec3 vertexPos;
@@ -9,8 +9,8 @@ uniform float scale;
 uniform float windowRatio;
 
 
-const int its = 100;
-const int measure = 7; // where to measure rate of change
+const int its = 1000;
+const int measure = 10; // where to measure rate of change
 
 float divergeMag(vec2 c) {
     vec2 z = vec2(0,0);
@@ -19,22 +19,28 @@ float divergeMag(vec2 c) {
     float diff = 1;
     for (int i = 0; i < its; ++i) {
         z = vec2(z.x*z.x - z.y*z.y, 2*z.x*z.y) + c;
+        float magnitudeCur = z.x*z.x + z.y*z.y;
+
+        if (magnitudeCur > 2) {
+            float val = 0.11+3*float(i)/its;
+            if (val > 1) return 1;
+            else return val;
+        }
         
         if (i >= measure - 2 && i < measure) {
-            float magnitudeCur = z.x*z.x + z.y*z.y;
+            
             if (i == measure - 2) {
                 prevMagnitude = magnitudeCur;
             } else {
                 diff = abs(magnitudeCur - prevMagnitude);
             }
-            
         }
     }
     
     float magnitude = z.x*z.x + z.y*z.y;
 
-    if (magnitude <16) return -1;
-    float val = pow(diff, -0.01);
+    if (magnitude < 4) return -1;
+    float val = exp(-0.8*diff);
     if (val >= 1) return 1.0f;
     return val;
 }
@@ -50,6 +56,6 @@ void main()
 
     float d = divergeMag(vec2(xPos, yPos));
     if (d < 0) FragColor = vec4(0.0f,0.0f,0.0f,1.0f);
-    else FragColor = vec4(d,d,d,1.0f);
+    else FragColor = vec4(d*0.8,d*0.7,d,1.0f);
 }
 

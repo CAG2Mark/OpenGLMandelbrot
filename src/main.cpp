@@ -32,9 +32,9 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 #pragma region scale and offset
 
-float scale = 2.0f;
-float offsetX = 0;
-float offsetY = 0;
+double scale = 2.0f;
+double offsetX = 0;
+double offsetY = 0;
 
 #pragma endregion
 
@@ -73,7 +73,7 @@ void process_input(GLFWwindow* window) {
 * @param usage The "usage" parameter that will be passed on to glBufferData().
 * @return The ID of the created VAO.
 */
-unsigned int create_vec3_vao(const float* vertices, 
+unsigned int create_vec3_vao(const double* vertices, 
 	unsigned int vx_size, const unsigned int* indices, unsigned int in_size, 
 	const char* texture_path = NULL, GLenum usage = GL_STATIC_DRAW) {
 	// init VAO
@@ -128,13 +128,13 @@ unsigned int create_vec3_vao(const float* vertices,
 	// tell shader how to interpret input data
 
 	// position
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 8 * sizeof(double), (void*)0);
 	glEnableVertexAttribArray(0);
 	// colour
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3*sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_DOUBLE, GL_FALSE, 8 * sizeof(double), (void*)(3*sizeof(double)));
 	glEnableVertexAttribArray(1);
 	// texture coords
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6* sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_DOUBLE, GL_FALSE, 8 * sizeof(double), (void*)(6* sizeof(double)));
 	glEnableVertexAttribArray(2);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -195,7 +195,7 @@ int main() {
 
 	// learning: render traingle
 
-	float vertices[] = {
+	double vertices[] = {
 		// positions          // colors           // texture coords
 		1.0f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
 		1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
@@ -233,7 +233,7 @@ int main() {
 		int wHeight, wWidth;
 		glfwGetWindowSize(window, &wWidth, &wHeight);
 		
-		sh.setFloat("windowRatio", (float)wHeight/float(wWidth));
+		sh.setFloat("windowRatio", (double)wHeight/(double)(wWidth));
 		sh.setFloat("scale", scale);
 
 		sh.setVec2Float("offset", offsetX, offsetY);
