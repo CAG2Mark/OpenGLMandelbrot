@@ -7,7 +7,6 @@ out vec4 vertexColor;
 out vec3 vertexPos;
 out vec2 texCoords;
 
-uniform vec3 offset; // translation matrix
 uniform mat4 transform; // linear transform matrix
 
 void main()

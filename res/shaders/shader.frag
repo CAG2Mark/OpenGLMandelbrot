@@ -23,7 +23,7 @@ float divergeMag(vec2 c) {
 
         if (magnitudeCur > 6) {
             float val = 0.11+3*float(i)/its;
-            if (val > 1) return 1;
+            if (val > 1) return -1.0f;
             else return val;
         }
         
@@ -39,7 +39,7 @@ float divergeMag(vec2 c) {
     
     float magnitude = z.x*z.x + z.y*z.y;
 
-    if (magnitude < 4) return -1;
+    if (magnitude < 4) return -1.0f;
     float val = exp(-0.8*diff);
     if (val >= 1) return 1.0f;
     return val;
