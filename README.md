@@ -14,5 +14,8 @@ You can modify the existing shader by creating them in `./res/shaders/custom/` t
 	Shader sh("res/shaders/shader.vert", "res/shaders/custom/shader.frag");
 ```
 
+# Note
+This project resuses a lot of code from when I was learning OpenGL, so please do excuse me if the code quality is no good.
+
 # Credits
 Many thanks to LearnOpenGL https://learnopengl.com/ for teaching me most of the things needed to make this and to https://github.com/lekro for the inspiration.
