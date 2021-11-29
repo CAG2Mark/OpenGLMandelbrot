@@ -2,3 +2,5 @@
 *.json
 .cache/**
 res/shaders/custom/**
+*.o
+bin/**
