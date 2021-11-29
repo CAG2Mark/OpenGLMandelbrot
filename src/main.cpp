@@ -30,11 +30,12 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 #pragma endregion
 
-#pragma region scale and offset
+#pragma region uniforms
 
 double scale = 2.0f;
 double offsetX = 0;
 double offsetY = 0;
+int iterations = 800;
 
 #pragma endregion
 
@@ -48,16 +49,27 @@ void process_input(GLFWwindow* window) {
 
 	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		offsetX += scaleConst * scale;
-	else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		offsetX -= scaleConst * scale;
-	else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
 		offsetY += scaleConst * scale;
-	else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
 		offsetY -= scaleConst * scale;
-	else if (glfwGetKey(window, GLFW_KEY_EQUAL) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_EQUAL) == GLFW_PRESS)
 		scale /= 1.2;
 	else if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_PRESS)
 		scale *= 1.2;
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	if (key == GLFW_KEY_LEFT_BRACKET) {
+		iterations -= 20;
+		spdlog::info("Iterations set to {}", iterations);
+	}
+	else if (key == GLFW_KEY_RIGHT_BRACKET) {
+		iterations += 20;
+		spdlog::info("Iterations set to {}", iterations);
+	}
 }
 
 #pragma endregion
@@ -149,7 +161,7 @@ int main() {
 
 	printf("Starting.\n");
 	
-	const int WIN_WIDTH = 1280, WIN_HEIGHT = 720;
+	const int WIN_WIDTH = 800, WIN_HEIGHT = 800;
 	spdlog::info("Creating window with size {}x{}", WIN_WIDTH, WIN_HEIGHT);
 
 	// Init GLFW
@@ -176,6 +188,7 @@ int main() {
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
+	glfwSetKeyCallback(window, key_callback);
 
 	// Check if GLAD was initialised
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -211,7 +224,9 @@ int main() {
 	unsigned int VAO = create_vec3_vao(vertices, sizeof(vertices), indices, sizeof(indices));
 	spdlog::info("VAO id: " + std::to_string(VAO));
 
-	Shader sh("res/shaders/shader.vert", "res/shaders/shader.frag");
+	Shader sh("res/shaders/shader.vert", "res/shaders/interesting/shader.frag");
+
+	float ogTime = glfwGetTime();
 
 	// Loop
 	// render loop, part 4.3 in book
@@ -238,6 +253,11 @@ int main() {
 
 		sh.setVec2Float("offset", offsetX, offsetY);
 
+		// color effect
+		float t = glfwGetTime() - ogTime;
+		sh.setFloat("colorOffset", t);
+
+		sh.setInt("its", iterations);
 
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
