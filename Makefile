@@ -25,11 +25,11 @@
 UNAME_S = $(shell uname -s)
 
 CC = clang++
-CFLAGS = -O3 -g -Wall -Wextra -Wpedantic -Wstrict-aliasing
+CFLAGS = -O2 -g -Wall -Wextra -Wpedantic -Wstrict-aliasing
 CFLAGS += -Wno-pointer-arith -Wno-newline-eof -Wno-unused-parameter -Wno-gnu-statement-expression
 CFLAGS += -Wno-gnu-compound-literal-initializer -Wno-gnu-zero-variadic-macro-arguments
 CFLAGS += -Ilib/glm -Ilib/glad/include -Ilib/glfw/include -Ilib/spdlog/include -fbracket-depth=1024
-LDFLAGS = lib/glad/src/glad.o lib/glm/glm/libglm_static.a lib/glfw/src/libglfw3.a lib/spdlog/build/libspdlog.a
+LDFLAGS = lib/glad/src/glad.o lib/glm/build/glm/libglm_static.a lib/glfw/build/src/libglfw3.a lib/spdlog/build/libspdlog.a
 
 # GLFW required frameworks on OSX
 ifeq ($(UNAME_S), Darwin)
@@ -49,9 +49,9 @@ BIN = bin
 all: dirs libs main
 
 libs:
-	cd lib/glm && cmake . -DBUILD_STATIC_LIBS=ON && make
+	cd lib/glm && mkdir -p build && cd build && cmake -S .. -B . -DBUILD_STATIC_LIBS=ON && make
 	cd lib/glad && $(CC) -o src/glad.o -Iinclude -c src/glad.c
-	cd lib/glfw && cmake . && make
+	cd lib/glfw && mkdir -p build && cd build && cmake -S .. -B . && make
 	cd lib/spdlog && mkdir -p build && cd build && cmake .. && make -j
 
 dirs:
