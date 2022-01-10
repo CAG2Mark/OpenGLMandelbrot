@@ -2,13 +2,13 @@
 Playing around with OpenGL
 
 # Building
-# Linux/Mac/Unix-like:
+## Linux/Mac/Unix-like:
 ```bash
 git clone https://github.com/CAG2Mark/OpenGLMandelbrot --recurse-submodules
 cd OpenGLMandelbrot
 make all && ./bin/viewer
 ```
-# Windows
+## Windows
 If you are *on* Windows, then unfortunately you cannot build this using the provided Makefiles. You can try modifying them to build on Windows - good luck. 
 Binaries for Windows have been included in `bin-windows` as I realise many people who want to build for Windows will be on Windows, not a Unix-like system.
 
